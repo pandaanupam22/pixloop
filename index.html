@@ -11,12 +11,28 @@
     }
 
     header {
-      padding: 15px;
-      text-align: center;
-      font-size: 24px;
-      font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 15px;
       border-bottom: 1px solid #222;
+      font-weight: bold;
+    }
+
+    .logo {
+      font-size: 20px;
       letter-spacing: 1px;
+    }
+
+    .profile {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
     }
 
     .container {
@@ -30,12 +46,10 @@
       margin-bottom: 15px;
       border-radius: 10px;
       overflow: hidden;
-      box-shadow: 0 0 10px rgba(255,255,255,0.05);
     }
 
     .post img {
       width: 100%;
-      display: block;
     }
 
     .caption {
@@ -54,7 +68,10 @@
 </head>
 <body>
 
-<header>📸 PixLoop</header>
+<header>
+  <div class="logo">📷 PixLoop</div>
+  <div class="profile">👤</div>
+</header>
 
 <div class="container">
 
@@ -65,12 +82,7 @@
 
   <div class="post">
     <img src="https://picsum.photos/500/400?random=2">
-    <div class="caption">Black theme looks clean 😎</div>
-  </div>
-
-  <div class="post">
-    <img src="https://picsum.photos/500/400?random=3">
-    <div class="caption">My first social website 💪</div>
+    <div class="caption">Now with profile icon 😎</div>
   </div>
 
 </div>
