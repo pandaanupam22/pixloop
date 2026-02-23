@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Instagram Clone</title>
+    <title>Interactive Instagram Clone</title>
     <style>
+        /* Pehle wala CSS same rahega, extra add kar raha hun */
         * {
             margin: 0;
             padding: 0;
@@ -23,7 +24,7 @@
             padding: 0 20px;
         }
 
-        /* Header */
+        /* Header - same */
         .header {
             background-color: #fff;
             border-bottom: 1px solid #dbdbdb;
@@ -42,16 +43,8 @@
         .logo {
             font-size: 32px;
             font-weight: 300;
-            font-family: 'Billabong', cursive; /* Instagram font, download if needed */
             color: #262626;
             text-decoration: none;
-        }
-
-        .search-bar {
-            flex: 1;
-            max-width: 215px;
-            margin: 0 30px;
-            position: relative;
         }
 
         .search-bar input {
@@ -71,16 +64,16 @@
         .icons img {
             width: 24px;
             height: 24px;
+            cursor: pointer;
         }
 
-        /* Stories */
+        /* Stories - same */
         .stories {
             background-color: #fff;
             border: 1px solid #dbdbdb;
             border-radius: 8px;
             margin: 30px 0;
             padding: 20px 0;
-            overflow: hidden;
         }
 
         .stories-header {
@@ -88,8 +81,6 @@
             align-items: center;
             padding: 0 20px 10px;
             font-weight: 600;
-            font-size: 14px;
-            color: #262626;
         }
 
         .story-grid {
@@ -97,12 +88,9 @@
             overflow-x: auto;
             padding: 0 10px;
             gap: 15px;
-            scrollbar-width: none; /* Firefox */
         }
 
-        .story-grid::-webkit-scrollbar {
-            display: none; /* Chrome */
-        }
+        .story-grid::-webkit-scrollbar { display: none; }
 
         .story {
             flex: 0 0 auto;
@@ -124,7 +112,6 @@
 
         .story-name {
             font-size: 12px;
-            color: #262626;
         }
 
         /* Feed */
@@ -143,6 +130,7 @@
             border-radius: 8px;
             margin-bottom: 28px;
             overflow: hidden;
+            cursor: pointer;
         }
 
         .post-header {
@@ -166,7 +154,6 @@
         .post-username {
             font-weight: 600;
             font-size: 14px;
-            color: #262626;
         }
 
         .post-location {
@@ -199,11 +186,12 @@
             height: 24px;
         }
 
+        .liked { filter: brightness(1) saturate(2); transform: scale(1.1); transition: all 0.2s; }
+
         .post-likes {
             padding: 0 16px 8px;
             font-weight: 600;
             font-size: 14px;
-            color: #262626;
         }
 
         .post-caption {
@@ -215,24 +203,13 @@
             margin-right: 4px;
         }
 
-        .post-caption-text {
-            display: inline;
-            font-size: 14px;
-        }
-
-        .post-comments {
-            padding: 0 16px 20px;
-            font-size: 14px;
-            color: #8e8e8e;
-        }
-
-        /* Sidebar (Profile Suggestions) */
+        /* Sidebar */
         .sidebar {
             width: 300px;
             flex-shrink: 0;
         }
 
-        .profile-card {
+        .profile-card, .suggestions-card {
             background-color: #fff;
             border: 1px solid #dbdbdb;
             border-radius: 8px;
@@ -240,249 +217,428 @@
             margin-bottom: 28px;
         }
 
-        .profile-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-
-        .profile-avatar {
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .profile-info h3 {
-            font-size: 14px;
-            font-weight: 600;
-            color: #262626;
-        }
-
-        .profile-info p {
-            font-size: 14px;
-            color: #8e8e8e;
-        }
-
-        .suggestions {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .suggestion {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .suggestion-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .suggestion-info {
-            flex: 1;
-        }
-
-        .suggestion-name {
-            font-size: 14px;
-            font-weight: 600;
-            color: #262626;
-        }
-
-        .suggestion-bio {
-            font-size: 12px;
-            color: #8e8e8e;
-        }
-
-        .follow-btn {
+        .follow-btn, .unfollow-btn {
             border: none;
-            background-color: #0095f6;
-            color: #fff;
             padding: 5px 10px;
             border-radius: 5px;
             font-size: 12px;
             font-weight: 600;
             cursor: pointer;
+            margin-left: auto;
         }
 
-        /* Responsive */
+        .follow-btn {
+            background-color: #0095f6;
+            color: #fff;
+        }
+
+        .unfollow-btn {
+            background-color: transparent;
+            color: #0095f6;
+            border: 1px solid #0095f6;
+        }
+
+        /* Modals */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active { display: flex; }
+
+        .modal-content {
+            max-width: 935px;
+            width: 90%;
+            max-height: 90%;
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .modal-image {
+            width: 100%;
+            height: 70vh;
+            object-fit: contain;
+            background-color: #000;
+        }
+
+        .modal-header, .modal-actions {
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .modal-close {
+            margin-left: auto;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #8e8e8e;
+        }
+
+        .comment-section {
+            padding: 16px;
+            max-height: 30vh;
+            overflow-y: auto;
+        }
+
+        .comment {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+
+        .comment-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .comment-input {
+            display: flex;
+            padding: 16px;
+            border-top: 1px solid #efefef;
+        }
+
+        .comment-input input {
+            flex: 1;
+            border: none;
+            padding: 8px;
+            font-size: 14px;
+        }
+
+        .comment-input button {
+            border: none;
+            background: none;
+            color: #0095f6;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Story Modal */
+        .story-modal .modal-content {
+            width: 90%;
+            height: 80%;
+            border-radius: 20px;
+        }
+
+        .story-viewer {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(45deg, #f09433, #e6683c);
+        }
+
+        /* Responsive - same */
         @media (max-width: 935px) {
-            .feed {
-                flex-direction: column;
-            }
-            .sidebar {
-                width: 100%;
-            }
+            .feed { flex-direction: column; }
+            .sidebar { width: 100%; }
         }
 
         @media (max-width: 768px) {
-            .container {
-                padding: 0 10px;
-            }
-            .header-content {
-                padding: 0 10px;
-            }
-            .search-bar {
-                display: none;
-            }
-            .icons {
-                gap: 15px;
-            }
-            .story-grid {
-                padding: 0;
-            }
+            .search-bar { display: none; }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
+        <!-- Header same -->
         <header class="header">
             <div class="header-content">
-                <a href="#" class="logo">PIXLOOP</a>
+                <a href="#" class="logo">Instagram</a>
                 <div class="search-bar">
-                    <input type="text" placeholder="Search">
+                    <input type="text" id="searchInput" placeholder="Search">
                 </div>
                 <div class="icons">
-                    <img src="https://via.placeholder.com/24?text=🛖" alt="Home">
-                    <img src="https://via.placeholder.com/24?text=📩" alt="Messages">
-                    <img src="https://via.placeholder.com/24?text=✈️" alt="Explore">
-                    <img src="https://via.placeholder.com/24?text=❤️" alt="Likes">
-                    <img src="https://via.placeholder.com/24?text=🛞" alt="Create">
+                    <img src="https://via.placeholder.com/24/ff6b35/000?text=🏠" alt="Home">
+                    <img src="https://via.placeholder.com/24/4ecdc4/000?text=📩" alt="Messages">
+                    <img src="https://via.placeholder.com/24/45b7d1/000?text=🧭" alt="Explore">
+                    <img src="https://via.placeholder.com/24/f093fb/000?text=❤️" alt="Likes">
+                    <img src="https://via.placeholder.com/24/45b7d1/000?text=✨" alt="Create">
                 </div>
             </div>
         </header>
 
         <!-- Stories -->
-        <section class="stories">
-            <div class="stories-header">
-                Stories
-            </div>
+        <section class="stories" id="stories">
+            <div class="stories-header">Stories</div>
             <div class="story-grid">
-                <div class="story">
-                    <img src="https://via.placeholder.com/66/ff0000/ffffff?text=📷" class="story-avatar" alt="Your Story">
+                <div class="story" data-story="your">
+                    <img src="https://via.placeholder.com/66/ff0000/fff?text=📷" class="story-avatar">
                     <div class="story-name">Your Story</div>
                 </div>
-                <div class="story">
-                    <img src="https://via.placeholder.com/66/0095f6/ffffff?text=U1" class="story-avatar" alt="User 1">
+                <div class="story" data-story="1">
+                    <img src="https://via.placeholder.com/66/0095f6/fff?text=U1" class="story-avatar">
                     <div class="story-name">user1</div>
                 </div>
-                <div class="story">
-                    <img src="https://via.placeholder.com/66/e1306c/ffffff?text=U2" class="story-avatar" alt="User 2">
-                    <div class="story-name">user2</div>
-                </div>
-                <div class="story">
-                    <img src="https://via.placeholder.com/66/8338ec/ffffff?text=U3" class="story-avatar" alt="User 3">
-                    <div class="story-name">user3</div>
-                </div>
-                <!-- Add more stories -->
+                <!-- More stories -->
             </div>
         </section>
 
         <div class="feed">
-            <!-- Main Feed -->
-            <main class="main-feed">
-                <!-- Post 1 -->
-                <article class="post">
-                    <div class="post-header">
-                        <img src="https://via.placeholder.com/42/0095f6/ffffff?text=U1" class="post-avatar" alt="User">
-                        <div class="post-user">
-                            <div class="post-username">user1</div>
-                            <div class="post-location">Mumbai, India</div>
-                        </div>
-                        <img src="https://via.placeholder.com/24/ff0000/ffffff?text=⋯" alt="More" class="action-btn">
-                    </div>
-                    <img src="https://picsum.photos/600/480?random=1" class="post-image" alt="Post Image">
-                    <div class="post-actions">
-                        <button class="action-btn"><img src="https://via.placeholder.com/24?text=❤️" alt="Like"></button>
-                        <button class="action-btn"><img src="https://via.placeholder.com/24?text=💬" alt="Comment"></button>
-                        <button class="action-btn"><img src="https://via.placeholder.com/24?text=📤" alt="Share"></button>
-                        <button class="action-btn" style="margin-left: auto;"><img src="https://via.placeholder.com/24?text=⭐" alt="Save"></button>
-                    </div>
-                    <div class="post-likes">1M likes</div>
-                    <div class="post-caption">
-                        <span class="post-caption-username">user1</span>
-                        <span class="post-caption-text">Beautiful day in Mumbai! 🌆 #mumbai #india</span>
-                    </div>
-                    <div class="post-comments">View all 45 comments</div>
-                </article>
-
-                <!-- Post 2 -->
-                <article class="post">
-                    <div class="post-header">
-                        <img src="https://via.placeholder.com/42/e1306c/ffffff?text=U2" class="post-avatar" alt="User">
-                        <div class="post-user">
-                            <div class="post-username">user2</div>
-                            <div class="post-location">Delhi, India</div>
-                        </div>
-                        <img src="https://via.placeholder.com/24/ff0000/ffffff?text=⋯" alt="More" class="action-btn">
-                    </div>
-                    <img src="https://picsum.photos/600/480?random=2" class="post-image" alt="Post Image">
-                    <div class="post-actions">
-                        <button class="action-btn"><img src="https://via.placeholder.com/24?text=❤️" alt="Like"></button>
-                        <button class="action-btn"><img src="https://via.placeholder.com/24?text=💬" alt="Comment"></button>
-                        <button class="action-btn"><img src="https://via.placeholder.com/24?text=📤" alt="Share"></button>
-                        <button class="action-btn" style="margin-left: auto;"><img src="https://via.placeholder.com/24?text=⭐" alt="Save"></button>
-                    </div>
-                    <div class="post-likes">567M likes</div>
-                    <div class="post-caption">
-                        <span class="post-caption-username">user2</span>
-                        <span class="post-caption-text">Foodie vibes! 🍕 #food #delhi</span>
-                    </div>
-                    <div class="post-comments">View all 23 comments</div>
-                </article>
-                <!-- Add more posts as needed -->
+            <main class="main-feed" id="feed">
+                <!-- Posts dynamically added by JS -->
             </main>
-
-            <!-- Sidebar -->
             <aside class="sidebar">
                 <div class="profile-card">
-                    <div class="profile-header">
-                        <img src="https://via.placeholder.com/56/0095f6/ffffff?text=You" class="profile-avatar" alt="You">
-                        <div class="profile-info">
-                            <h3>yourusername</h3>
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <img src="https://via.placeholder.com/56/0095f6/fff?text=You" alt="You">
+                        <div>
+                            <h3 id="yourUsername">yourusername</h3>
                             <p>Your Profile</p>
                         </div>
                     </div>
                 </div>
-                <div class="profile-card">
-                    <div class="suggestions">
-                        <div style="font-weight: 600; font-size: 14px; color: #262626; margin-bottom: 20px;">Suggestions for you</div>
-                        <div class="suggestion">
-                            <img src="https://via.placeholder.com/32/ff6b6b/ffffff?text=U4" class="suggestion-avatar" alt="Suggested">
-                            <div class="suggestion-info">
-                                <div class="suggestion-name">suggested_user4</div>
-                                <div class="suggestion-bio">New to Instagram</div>
-                            </div>
-                            <button class="follow-btn">Follow</button>
-                        </div>
-                        <div class="suggestion">
-                            <img src="https://via.placeholder.com/32/4ecdc4/ffffff?text=U5" class="suggestion-avatar" alt="Suggested">
-                            <div class="suggestion-info">
-                                <div class="suggestion-name">suggested_user5</div>
-                                <div class="suggestion-bio">Follows you</div>
-                            </div>
-                            <button class="follow-btn">Follow</button>
-                        </div>
-                    </div>
+                <div class="suggestions-card">
+                    <div style="font-weight: 600; margin-bottom: 20px;">Who to follow</div>
+                    <div id="suggestions"></div>
                 </div>
             </aside>
         </div>
     </div>
 
+    <!-- Post Modal -->
+    <div class="modal" id="postModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <img id="modalAvatar" class="post-avatar" src="">
+                <div>
+                    <div id="modalUsername" class="post-username"></div>
+                    <div id="modalLocation" class="post-location"></div>
+                </div>
+                <button class="modal-close">&times;</button>
+            </div>
+            <img id="modalImage" class="modal-image" src="" alt="">
+            <div class="modal-actions">
+                <button class="action-btn" id="modalLike"><img id="modalLikeIcon" src="https://via.placeholder.com/24?text=❤️" alt="Like"></button>
+                <button class="action-btn"><img src="https://via.placeholder.com/24?text=💬" alt="Comment"></button>
+                <button class="action-btn"><img src="https://via.placeholder.com/24?text=📤" alt="Share"></button>
+            </div>
+            <div class="post-likes" id="modalLikes"></div>
+            <div class="post-caption" id="modalCaption"></div>
+            <div class="comment-section" id="modalComments"></div>
+            <div class="comment-input">
+                <input type="text" id="commentInput" placeholder="Add a comment...">
+                <button id="addComment">Post</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Story Modal -->
+    <div class="modal story-modal" id="storyModal">
+        <div class="modal-content">
+            <div class="story-viewer">
+                <div style="text-align: center; color: white; font-size: 24px;">Story Viewer<br><small>Tap to next</small></div>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // Simple like functionality (demo)
-        document.querySelectorAll('.action-btn img[alt="Like"]').forEach((likeBtn, index) => {
-            likeBtn.parentElement.addEventListener('click', () => {
-                likeBtn.src = likeBtn.src.includes('❤️') ? 'https://via.placeholder.com/24?text=🤍' : 'https://via.placeholder.com/24?text=❤️';
-                // Update likes count here if needed
-            });
+        // Data (demo posts)
+        const posts = [
+            {
+                id: 1,
+                user: 'user1',
+                avatar: 'https://via.placeholder.com/42/0095f6/fff?text=U1',
+                location: 'Mumbai, India',
+                image: 'https://picsum.photos/600/480?random=1',
+                caption: 'Beautiful day in Mumbai! 🌆 #mumbai',
+                likes: 1234,
+                liked: false,
+                comments: ['Great pic!', 'Love Mumbai ❤️']
+            },
+            {
+                id: 2,
+                user: 'user2',
+                avatar: 'https://via.placeholder.com/42/e1306c/fff?text=U2',
+                location: 'Delhi, India',
+                image: 'https://picsum.photos/600/480?random=2',
+                caption: 'Foodie vibes! 🍕 #food',
+                likes: 567,
+                liked: false,
+                comments: ['Yummy!', 'Where is this?']
+            }
+        ];
+
+        const stories = ['your', '1', '2', '3'];
+
+        // LocalStorage for persistence
+        function loadData(key, defaultVal) {
+            return JSON.parse(localStorage.getItem(key)) || defaultVal;
+        }
+
+        function saveData(key, data) {
+            localStorage.setItem(key, JSON.stringify(data));
+        }
+
+        // Init data
+        posts.forEach(post => {
+            const saved = loadData(`post_${post.id}`);
+            post.likes = saved.likes || post.likes;
+            post.liked = saved.liked || false;
+            post.comments = saved.comments || post.comments;
         });
+
+        // Render functions
+        function renderPosts() {
+            const feed = document.getElementById('feed');
+            feed.innerHTML = posts.map(post => `
+                <article class="post" data-id="${post.id}">
+                    <div class="post-header">
+                        <img src="${post.avatar}" class="post-avatar">
+                        <div class="post-user">
+                            <div class="post-username">${post.user}</div>
+                            <div class="post-location">${post.location}</div>
+                        </div>
+                    </div>
+                    <img src="${post.image}" class="post-image">
+                    <div class="post-actions">
+                        <button class="action-btn"><img src="${post.liked ? 'https://via.placeholder.com/24/ff0000/fff?text=❤️' : 'https://via.placeholder.com/24?text=🤍'}" alt="Like" class="like-icon"></button>
+                        <button class="action-btn"><img src="https://via.placeholder.com/24?text=💬" alt="Comment"></button>
+                        <button class="action-btn"><img src="https://via.placeholder.com/24?text=📤" alt="Share"></button>
+                        <button class="action-btn" style="margin-left: auto;"><img src="https://via.placeholder.com/24?text=⭐" alt="Save"></button>
+                    </div>
+                    <div class="post-likes">${post.likes.toLocaleString()} likes</div>
+                    <div class="post-caption">
+                        <span class="post-caption-username">${post.user}</span>
+                        ${post.caption}
+                    </div>
+                    <div class="post-comments">View all ${post.comments.length} comments</div>
+                </article>
+            `).join('');
+        }
+
+        function renderSuggestions() {
+            const suggestions = document.getElementById('suggestions');
+            suggestions.innerHTML = `
+                <div class="suggestion">
+                    <img src="https://via.placeholder.com/32/ff6b6b/fff?text=U4" class="suggestion-avatar">
+                    <div>
+                        <div class="suggestion-name">suggested_user4</div>
+                        <div class="suggestion-bio">New to Instagram</div>
+                    </div>
+                    <button class="follow-btn" data-user="user4">Follow</button>
+                </div>
+                <div class="suggestion">
+                    <img src="https://via.placeholder.com/32/4ecdc4/fff?text=U5" class="suggestion-avatar">
+                    <div>
+                        <div class="suggestion-name">suggested_user5</div>
+                        <div class="suggestion-bio">Follows you</div>
+                    </div>
+                    <button class="follow-btn followed" data-user="user5">Following</button>
+                </div>
+            `;
+        }
+
+        // Event Listeners
+        document.addEventListener('click', (e) => {
+            // Like posts
+            if (e.target.closest('.like-icon')) {
+                const postEl = e.target.closest('.post');
+                const postId = parseInt(postEl.dataset.id);
+                const post = posts.find(p => p.id === postId);
+                post.liked = !post.liked;
+                post.likes += post.liked ? 1 : -1;
+                saveData(`post_${postId}`, { likes: post.likes, liked: post.liked, comments: post.comments });
+                renderPosts();
+            }
+
+            // Post modal open
+            if (e.target.closest('.post')) {
+                const postEl = e.target.closest('.post');
+                const postId = parseInt(postEl.dataset.id);
+                const post = posts.find(p => p.id === postId);
+                document.getElementById('modalAvatar').src = post.avatar;
+                document.getElementById('modalUsername').textContent = post.user;
+                document.getElementById('modalLocation').textContent = post.location;
+                document.getElementById('modalImage').src = post.image;
+                document.getElementById('modalCaption').innerHTML = `<span class="post-caption-username">${post.user}</span> ${post.caption}`;
+                document.getElementById('modalLikes').textContent = post.likes.toLocaleString() + ' likes';
+                document.getElementById('modalLikeIcon').src = post.liked ? 'https://via.placeholder.com/24/ff0000/fff?text=❤️' : 'https://via.placeholder.com/24?text=🤍';
+                renderModalComments(post.comments);
+                document.getElementById('postModal').classList.add('active');
+                currentPostId = postId;
+            }
+
+            // Follow buttons
+            if (e.target.classList.contains('follow-btn')) {
+                const btn = e.target;
+                if (btn.classList.contains('followed')) {
+                    btn.textContent = 'Follow';
+                    btn.classList.remove('followed');
+                    btn.classList.add('follow-btn');
+                    btn.style.backgroundColor = '#0095f6';
+                    btn.style.color = '#fff';
+                } else {
+                    btn.textContent = 'Following';
+                    btn.classList.add('followed');
+                    btn.classList.remove('follow-btn');
+                    btn.style.backgroundColor = 'transparent';
+                    btn.style.color = '#0095f6';
+                    btn.style.border = '1px solid #0095f6';
+                }
+            }
+
+            // Story modal
+            if (e.target.closest('.story')) {
+                document.getElementById('storyModal').classList.add('active');
+            }
+
+            // Close modals
+            if (e.target.classList.contains('modal') || e.target.classList.contains('modal-close')) {
+                document.querySelectorAll('.modal').forEach(modal => modal.classList.remove('active'));
+            }
+        });
+
+        let currentPostId = 0;
+        function renderModalComments(comments) {
+            const container = document.getElementById('modalComments');
+            container.innerHTML = comments.map(c => `
+                <div class="comment">
+                    <img src="https://via.placeholder.com/28/0095f6/fff?text=C" class="comment-avatar">
+                    <span>${c}</span>
+                </div>
+            `).join('');
+        }
+
+        // Add comment
+        document.getElementById('addComment').addEventListener('click', () => {
+            const input = document.getElementById('commentInput');
+            if (input.value.trim()) {
+                const post = posts.find(p => p.id === currentPostId);
+                post.comments.push(input.value.trim());
+                saveData(`post_${currentPostId}`, { likes: post.likes, liked: post.liked, comments: post.comments });
+                renderModalComments(post.comments);
+                input.value = '';
+            }
+        });
+
+        // Search (filter posts)
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            const filtered = posts.filter(p => p.user.toLowerCase().includes(query) || p.caption.toLowerCase().includes(query));
+            // For demo, update feed with filtered (simplified)
+            console.log('Searching:', filtered);
+        });
+
+        // Init
+        renderPosts();
+        renderSuggestions();
+        document.getElementById('yourUsername').textContent = loadData('yourUsername', 'yourusername');
     </script>
 </body>
 </html>
