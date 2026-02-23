@@ -3,311 +3,730 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Instagram Clone</title>
+    <title>PixLoop - Photosharing Platform</title>
     <style>
-        *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;background:#fafafa;color:#262626}
-        .container{max-width:935px;margin:0 auto;padding:0 20px}
-        .header{background:#fff;border-bottom:1px solid #dbdbdb;padding:10px 0;position:sticky;top:0;z-index:100}
-        .header-content{display:flex;align-items:center;justify-content:space-between}
-        .logo{font-size:32px;font-weight:300;text-decoration:none;color:#262626}
-        .search-bar{flex:1;max-width:215px;margin:0 30px}
-        .search-bar input{width:100%;padding:8px 12px;border:1px solid #dbdbdb;border-radius:8px;background:#fafafa;font-size:14px}
-        .icons{display:flex;gap:22px}
-        .icons img{width:24px;height:24px;cursor:pointer}
-        .stories,.post,.profile-card,.suggestions-card{background:#fff;border:1px solid #dbdbdb;border-radius:8px}
-        .stories{margin:30px 0;padding:20px 0}
-        .stories-header{padding:0 20px 10px;font-weight:600}
-        .story-grid{display:flex;overflow-x:auto;padding:0 10px;gap:15px;scrollbar-width:none}
-        .story-grid::-webkit-scrollbar{display:none}
-        .story{text-align:center;cursor:pointer}
-        .story-avatar{width:66px;height:66px;border-radius:50%;border:2px solid #fff;box-shadow:0 4px 12px rgba(0,0,0,0.15);margin-bottom:8px;background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);padding:2px}
-        .feed{display:flex;gap:28px}
-        .main-feed{flex:1}
-        .post{margin-bottom:28px;overflow:hidden}
-        .post-header{display:flex;align-items:center;padding:12px 16px;gap:12px}
-        .post-avatar{width:42px;height:42px;border-radius:50%;object-fit:cover}
-        .post-image{width:100%;height:480px;object-fit:cover;background:#efefef;cursor:pointer}
-        .post-actions{display:flex;padding:8px 16px;gap:12px}
-        .action-btn{background:none;border:none;cursor:pointer;padding:0}
-        .post-caption,.post-comments{padding:0 16px 16px;font-size:14px}
-        .post-caption{cursor:pointer}
-        .post-comments{color:#8e8e8e;cursor:pointer}
-        .sidebar{width:300px;flex-shrink:0}
-        .profile-card,.suggestions-card{padding:20px;margin-bottom:28px}
-        .suggestion{display:flex;align-items:center;gap:12px;margin-bottom:18px}
-        .follow-btn{border:none;background:#0095f6;color:#fff;padding:5px 10px;border-radius:5px;font-size:12px;font-weight:600;cursor:pointer}
-        .followed{background:transparent;color:#0095f6;border:1px solid #0095f6}
-        .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:1000;justify-content:center;align-items:center}
-        .modal.active{display:flex}
-        .modal-content{max-width:935px;width:90%;max-height:90%;background:#fff;border-radius:12px;overflow:hidden;position:relative}
-        .modal-header,.modal-actions{padding:16px;display:flex;align-items:center;gap:12px}
-        .modal-image{width:100%;max-height:65vh;object-fit:contain;background:#000}
-        .modal-close{margin-left:auto;background:none;border:none;font-size:28px;color:#8e8e8e;cursor:pointer}
-        .comment-section{padding:16px;max-height:25vh;overflow-y:auto}
-        .comment{display:flex;gap:8px;margin-bottom:12px;font-size:14px}
-        .comment-avatar{width:28px;height:28px;border-radius:50%;object-fit:cover}
-        .comment-input{display:flex;padding:16px;border-top:1px solid #efefef}
-        .comment-input input{flex:1;border:none;padding:8px;font-size:14px}
-        .comment-input button{border:none;background:none;color:#0095f6;font-weight:600;cursor:pointer}
-        @media(max-width:935px){.feed{flex-direction:column}.sidebar{width:100%}}
-        @media(max-width:768px){.search-bar{display:none}}
+        :root {
+            --primary: #FF385C;      /* PixLoop main brand color */
+            --secondary: #00A699;    /* Teal accent */
+            --dark: #222222;
+            --light-bg: #FAFAFA;
+            --border: #EFEFEF;
+            --text: #262626;
+            --text-light: #8E8E8E;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light-bg);
+            color: var(--text);
+        }
+        
+        .container {
+            max-width: 935px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        .header {
+            background: white;
+            border-bottom: 1px solid var(--border);
+            padding: 12px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 1px 5px rgba(0,0,0,0.05);
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--primary);
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+        
+        .logo span {
+            color: var(--secondary);
+        }
+        
+        .search-bar {
+            flex: 1;
+            max-width: 250px;
+            margin: 0 30px;
+            position: relative;
+        }
+        
+        .search-bar input {
+            width: 100%;
+            padding: 10px 12px 10px 35px;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            background-color: #EFEFEF;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s;
+        }
+        
+        .search-bar input:focus {
+            background-color: white;
+            border-color: var(--primary);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+            font-size: 14px;
+        }
+        
+        .icons {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+        
+        .icon-btn {
+            position: relative;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+            color: var(--text);
+            transition: color 0.2s;
+        }
+        
+        .icon-btn:hover {
+            color: var(--primary);
+        }
+        
+        .notification-badge {
+            position: absolute;
+            right: -5px;
+            top: -5px;
+            background-color: var(--primary);
+            color: white;
+            font-size: 10px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .user-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            object-fit: cover;
+            cursor: pointer;
+            border: 2px solid var(--primary);
+        }
+        
+        /* Stories */
+        .stories-container {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin: 30px 0;
+            padding: 20px 0;
+            overflow: hidden;
+        }
+        
+        .stories-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px 15px;
+            font-weight: 700;
+            font-size: 16px;
+        }
+        
+        .view-all {
+            color: var(--primary);
+            font-size: 14px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .stories-scroll {
+            display: flex;
+            overflow-x: auto;
+            padding: 0 10px;
+            gap: 15px;
+            scrollbar-width: none;
+        }
+        
+        .stories-scroll::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .story {
+            flex: 0 0 auto;
+            text-align: center;
+            cursor: pointer;
+            width: 80px;
+            transition: transform 0.2s;
+        }
+        
+        .story:hover {
+            transform: translateY(-3px);
+        }
+        
+        .story-ring {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #FF385C, #FF6B9D);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 8px;
+            padding: 2px;
+        }
+        
+        .story-ring.your {
+            background: linear-gradient(45deg, #8E8E8E, #B5B5B5);
+        }
+        
+        .story-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid white;
+        }
+        
+        .story-name {
+            font-size: 12px;
+            font-weight: 600;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        /* Feed */
+        .feed {
+            display: flex;
+            gap: 28px;
+            margin-bottom: 50px;
+        }
+        
+        .main-feed {
+            flex: 1;
+        }
+        
+        .post {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            margin-bottom: 30px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .post:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        }
+        
+        .post-header {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            gap: 12px;
+        }
+        
+        .post-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            object-fit: cover;
+            cursor: pointer;
+            border: 2px solid var(--primary);
+        }
+        
+        .post-user-info {
+            flex: 1;
+        }
+        
+        .post-username {
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        .post-location {
+            font-size: 12px;
+            color: var(--text-light);
+            margin-top: 2px;
+        }
+        
+        .post-time {
+            font-size: 12px;
+            color: var(--text-light);
+            margin-left: auto;
+        }
+        
+        .post-more {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: var(--text-light);
+            cursor: pointer;
+            padding: 0 5px;
+        }
+        
+        .post-image-container {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            background: #000;
+            cursor: pointer;
+            overflow: hidden;
+        }
+        
+        .post-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform103ms;
+        }
+        
+        .post-image:hover {
+            transform: scale(1.02);
+        }
+        
+        .double-tap-heart {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            font-size: 120px;
+            color: white;
+            opacity: 0;
+            filter: drop-shadow(0 0 10px rgba(0,0,0,0.3));
+            pointer-events: none;
+        }
+        
+        .double-tap-heart.animate {
+            animation: heartBeat 0.8s ease-out;
+        }
+        
+        @keyframes heartBeat {
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.8; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
+        }
+        
+        .post-actions {
+            display: flex;
+            padding: 12px 16px;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .action-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 24px;
+            padding: 0;
+            color: var(--text);
+            position: relative;
+            transition: color 0.2s;
+        }
+        
+        .action-btn:hover {
+            color: var(--primary);
+        }
+        
+        .action-btn.liked {
+            color: var(--primary);
+        }
+        
+        .action-btn.save-btn {
+            margin-left: auto;
+            font-size: 22px;
+        }
+        
+        .action-btn.save-btn.saved {
+            color: var(--secondary);
+        }
+        
+        .action-btn .emoji {
+            font-size: 24px;
+        }
+        
+        .likes-count {
+            padding: 0 16px 8px;
+            font-weight: 700;
+            font-size: 14px;
+        }
+        
+        .post-caption {
+            padding: 0 16px 12px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .hashtag {
+            color: var(--primary);
+            cursor: pointer;
+        }
+        
+        .post-stats {
+            padding: 0 16px 16px;
+            font-size: 14px;
+            color: var(--text-light);
+            display: flex;
+            gap: 20px;
+        }
+        
+        .stat {
+            cursor: pointer;
+        }
+        
+        .stat:hover {
+            text-decoration: underline;
+        }
+        
+        .add-comment {
+            display: flex;
+            padding: 16px;
+            border-top: 1px solid var(--border);
+            gap: 12px;
+            align-items: center;
+        }
+        
+        .comment-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 14px;
+        }
+        
+        .post-button {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-weight: 700;
+            cursor: pointer;
+            padding: 5px 10px;
+            opacity: 0.5;
+        }
+        
+        .post-button.active {
+            opacity: 1;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 300px;
+            flex-shrink: 0;
+        }
+        
+        .profile-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+        
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 16px;
+            border: 3px solid var(--primary);
+        }
+        
+        .profile-name {
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+        
+        .profile-bio {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+        
+        .profile-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+        
+        .stat-number {
+            font-weight: 700;
+            font-size: 18px;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-light);
+        }
+        
+        .edit-profile {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 0;
+            width: 100%;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .edit-profile:hover {
+            background-color: #E60023;
+        }
+        
+        .suggestions {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+        }
+        
+        .suggestions-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .suggestions-title {
+            font-weight: 700;
+            font-size: 16px;
+        }
+        
+        .see-all {
+            font-size: 14px;
+            color: var(--primary);
+            font-weight: 700;
+            cursor: pointer;
+        }
+        
+        .suggestion-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .suggestion-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .suggestion-info {
+            flex: 1;
+        }
+        
+        .suggestion-name {
+            font-weight: 700;
+            font-size: 14px;
+        }
+        
+        .suggestion-bio {
+            font-size: 12px;
+            color: var(--text-light);
+        }
+        
+        .follow-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        
+        .follow-btn.following {
+            background: white;
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+        
+        /* Responsive */
+        @media (max-width: 935px) {
+            .feed {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .search-bar {
+                display: none;
+            }
+            
+            .icons {
+                gap: 20px;
+            }
+            
+            .post-image-container {
+                height: 400px;
+            }
+        }
+        
+        /* Dark Mode Toggle */
+        .dark-mode-toggle {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--primary);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 56, 92, 0.3);
+            z-index: 100;
+        }
+        
+        /* Interaction Effects */
+        .zoom-on-hover {
+            transition: transform 0.3s;
+        }
+        
+        .zoom-on-hover:hover {
+            transform: scale(1.05);
+        }
+        
+        .pulse-on-like {
+            animation: pulse 0.5s;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
     </style>
 </head>
 <body>
-<div class="container">
-    <header class="header">
-        <div class="header-content">
-            <a href="#" class="logo">PIXLOOP</a>
-            <div class="search-bar">
-                <input type="text" id="searchInput" placeholder="Search users or captions">
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <a href="#" class="logo">PIX<span>LOOP</span></a>
+                <div class="search-bar">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="searchInput" placeholder="Search on PixLoop">
+                </div>
+                <div class="icons">
+                    <button class="icon-btn" id="homeBtn" title="Home">🏠</button>
+                    <button class="icon-btn" id="exploreBtn" title="Explore">
+                        🌍
+                        <span class="notification-badge" id="exploreBadge">3</span>
+                    </button>
+                    <button class="icon-btn" id="notificationBtn" title="Notifications">
+                        🔔
+                        <span class="notification-badge" id="notificationBadge">5</span>
+                    </button>
+                    <button class="icon-btn" id="createBtn" title="Create Post">➕</button>
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg" class="user-avatar" alt="Your profile">
+                </div>
             </div>
-            <div class="icons">
-                <img src="https://via.placeholder.com/24?text=🛖" alt="Home">
-                <img src="https://via.placeholder.com/24?text=📩" alt="Messages">
-                <img src="https://via.placeholder.com/24?text=✈️" alt="Explore">
-                <img src="https://via.placeholder.com/24?text=❤️" alt="Likes">
-                <img src="https://via.placeholder.com/24?text=🛞" alt="Create">
+        </header>
+
+        <!-- Stories -->
+        <div class="stories-container">
+            <div class="stories-header">
+                <span>Today's Stories</span>
+                <span class="view-all" id="viewAllStories">View all</span>
+            </div>
+            <div class="stories-scroll" id="storiesScroll">
+                <!-- Stories will be generated by JavaScript -->
             </div>
         </div>
-    </header>
 
-    <section class="stories">
-        <div class="stories-header">Stories</div>
-        <div class="story-grid">
-            <div class="story" data-story="your">
-                <img src="https://via.placeholder.com/66/ff0000/fff?text=📷" class="story-avatar">
-                <div class="story-name">Your Story</div>
-            </div>
-            <div class="story" data-story="1">
-                <img src="https://via.placeholder.com/66/0095f6/fff?text=U1" class="story-avatar">
-                <div class="story-name">user1</div>
-            </div>
-        </div>
-    </section>
+        <!-- Main Content -->
+        <div class="feed">
+            <main class="main-feed" id="mainFeed">
+                <!-- Posts will be generated by JavaScript -->
+            </main>
 
-    <div class="feed">
-        <main class="main-feed" id="feed"></main>
-        <aside class="sidebar">
-            <div class="profile-card">
-                <div style="display:flex;align-items:center;gap:12px;">
-                    <img src="https://via.placeholder.com/56/0095f6/fff?text=YOU" class="post-avatar">
-                    <div>
-                        <h3 id="yourUsername">yourusername</h3>
-                        <p>Your Profile</p>
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="profile-card">
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg" class="profile-avatar" alt="Your profile">
+                    <h3 class="profile-name" id="profileName">Ajay Singh</h3>
+                    <p class="profile-bio" id="profileBio">Photographer | Traveller 📸✈️</p>
+                    <div class="profile-stats">
+                        <div class="stat-item">
+                            <div class="stat-number" id="postCount">42</div>
+                            <div class="stat-label">Posts</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="followerCount">1.2K</div>
+                            <div class="stat-label">Followers</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="followingCount">356</div>
+                            <div class="stat-label">Following</div>
+                        </div>
+                    </div>
+                    <button class="edit-profile" id="editProfileBtn">Edit Profile</button>
+                </div>
+
+                <div class="suggestions">
+                    <div class="suggestions-header">
+                        <span class="suggestions-title">Suggested for you</span>
+                        <span class="see-all" id="seeAllSuggestions">See all</span>
+                    </div>
+                    <div id="suggestionsList">
+                        <!-- Suggestions will be generated by JavaScript -->
                     </div>
                 </div>
-            </div>
-            <div class="suggestions-card">
-                <div style="font-weight:600;margin-bottom:20px;">Who to follow</div>
-                <div id="suggestions"></div>
-            </div>
-        </aside>
-    </div>
-</div>
-
-<div class="modal" id="postModal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <img id="modalAvatar" class="post-avatar">
-            <div>
-                <div id="modalUsername" class="post-username"></div>
-                <div id="modalLocation" class="post-location"></div>
-            </div>
-            <button class="modal-close" data-close>&times;</button>
-        </div>
-        <img id="modalImage" class="modal-image">
-        <div class="modal-actions">
-            <button class="action-btn" data-modal-like><img id="modalLikeIcon" src=""></button>
-            <button class="action-btn"><img src="https://via.placeholder.com/24?text=💬"></button>
-            <button class="action-btn"><img src="https://via.placeholder.com/24?text=📤"></button>
-        </div>
-        <div class="post-likes" id="modalLikes"></div>
-        <div class="post-caption" id="modalCaption"></div>
-        <div class="comment-section" id="modalComments"></div>
-        <div class="comment-input">
-            <input type="text" id="commentInput" placeholder="Add a comment...">
-            <button id="addComment">Post</button>
+            </aside>
         </div>
     </div>
-</div>
 
-<div class="modal" id="storyModal">
-    <div class="modal-content" style="height:80%;border-radius:20px;">
-        <div style="height:100%;display:flex;align-items:center;justify-content:center;font-size:24px;color:#fff;background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);">
-            Story Viewer
-        </div>
-    </div>
-</div>
+    <!-- Dark Mode Toggle -->
+    <button class="dark-mode-toggle" id="darkModeToggle">🌙</button>
 
-<script>
-const postsData = [
-    {id:1,user:'user1',avatar:'https://via.placeholder.com/42/0095f6/fff?text=U1',location:'Mumbai, India',image:'https://picsum.photos/600/480?random=1',caption:'Beautiful day in Mumbai! 🌆 #mumbai',likes:1234,liked:false,comments:['Great pic!','Love Mumbai ❤️']},
-    {id:2,user:'user2',avatar:'https://via.placeholder.com/42/e1306c/fff?text=U2',location:'Delhi, India',image:'https://picsum.photos/600/480?random=2',caption:'Foodie vibes! 🍕 #food',likes:567,liked:false,comments:['Yummy!','Where is this?']}
-];
-
-const followState = {};
-let currentPostId = null;
-const feedEl = document.getElementById('feed');
-const suggestionsEl = document.getElementById('suggestions');
-const postModal = document.getElementById('postModal');
-const storyModal = document.getElementById('storyModal');
-
-function loadPersisted() {
-    postsData.forEach(post => {
-        const saved = JSON.parse(localStorage.getItem(`post_${post.id}`));
-        if (saved) {
-            post.likes = saved.likes;
-            post.liked = saved.liked;
-            post.comments = saved.comments;
-        }
-    });
-}
-loadPersisted();
-
-function savePost(post) {
-    localStorage.setItem(`post_${post.id}`, JSON.stringify({likes:post.likes, liked:post.liked, comments:post.comments}));
-}
-
-function renderPosts(list = postsData) {
-    feedEl.innerHTML = list.map(post => `
-        <article class="post" data-id="${post.id}">
-            <div class="post-header">
-                <img src="${post.avatar}" class="post-avatar">
-                <div>
-                    <div class="post-username">${post.user}</div>
-                    <div class="post-location">${post.location}</div>
-                </div>
-            </div>
-            <img src="${post.image}" class="post-image" data-open-post>
-            <div class="post-actions">
-                <button class="action-btn" data-action="like"><img class="like-icon" src="${post.liked ? 'https://via.placeholder.com/24/ff0000/fff?text=❤️' : 'https://via.placeholder.com/24?text=🤍'}"></button>
-                <button class="action-btn" data-action="comment"><img src="https://via.placeholder.com/24?text=💬"></button>
-                <button class="action-btn" data-action="share"><img src="https://via.placeholder.com/24?text=📤"></button>
-                <button class="action-btn" style="margin-left:auto;"><img src="https://via.placeholder.com/24?text=⭐"></button>
-            </div>
-            <div class="post-likes">${post.likes.toLocaleString()} likes</div>
-            <div class="post-caption" data-open-post>
-                <span class="post-caption-username">${post.user}</span> ${post.caption}
-            </div>
-            <div class="post-comments" data-open-post>View all ${post.comments.length} comments</div>
-        </article>
-    `).join('');
-}
-renderPosts();
-
-function renderSuggestions() {
-    const template = [
-        {user:'suggested_user4',bio:'New to Instagram',avatar:'https://via.placeholder.com/32/ff6b6b/fff?text=U4'},
-        {user:'suggested_user5',bio:'Follows you',avatar:'https://via.placeholder.com/32/4ecdc4/fff?text=U5'}
-    ];
-    suggestionsEl.innerHTML = template.map(item => `
-        <div class="suggestion">
-            <img src="${item.avatar}" class="suggestion-avatar">
-            <div>
-                <div class="suggestion-name">${item.user}</div>
-                <div class="suggestion-bio">${item.bio}</div>
-            </div>
-            <button class="follow-btn ${followState[item.user] ? 'followed' : ''}" data-follow="${item.user}">
-                ${followState[item.user] ? 'Following' : 'Follow'}
-            </button>
-        </div>
-    `).join('');
-}
-renderSuggestions();
-
-function openPostModal(postId) {
-    const post = postsData.find(p => p.id === postId);
-    if (!post) return;
-    currentPostId = postId;
-    document.getElementById('modalAvatar').src = post.avatar;
-    document.getElementById('modalUsername').textContent = post.user;
-    document.getElementById('modalLocation').textContent = post.location;
-    document.getElementById('modalImage').src = post.image;
-    document.getElementById('modalLikeIcon').src = post.liked ? 'https://via.placeholder.com/24/ff0000/fff?text=❤️' : 'https://via.placeholder.com/24?text=🤍';
-    document.getElementById('modalLikes').textContent = `${post.likes.toLocaleString()} likes`;
-    document.getElementById('modalCaption').innerHTML = `<span class="post-caption-username">${post.user}</span> ${post.caption}`;
-    document.getElementById('modalComments').innerHTML = post.comments.map(c => `
-        <div class="comment">
-            <img src="https://via.placeholder.com/28/0095f6/fff?text=C" class="comment-avatar">
-            <span>${c}</span>
-        </div>
-    `).join('');
-    postModal.classList.add('active');
-}
-
-document.addEventListener('click', e => {
-    const likeBtn = e.target.closest('[data-action="like"]');
-    if (likeBtn) {
-        e.stopPropagation();
-        const postEl = likeBtn.closest('.post');
-        const post = postsData.find(p => p.id === Number(postEl.dataset.id));
-        post.liked = !post.liked;
-        post.likes += post.liked ? 1 : -1;
-        savePost(post);
-        renderPosts(filteredPostsCache || postsData);
-        return;
-    }
-
-    if (e.target.closest('[data-open-post]')) {
-        const postId = Number(e.target.closest('.post').dataset.id);
-        openPostModal(postId);
-        return;
-    }
-
-    if (e.target.dataset.follow) {
-        const user = e.target.dataset.follow;
-        followState[user] = !followState[user];
-        renderSuggestions();
-        return;
-    }
-
-    if (e.target.dataset.story || e.target.closest('.story')) {
-        storyModal.classList.add('active');
-        return;
-    }
-
-    if (e.target.dataset.close || e.target === postModal) postModal.classList.remove('active');
-    if (e.target === storyModal) storyModal.classList.remove('active');
-});
-
-document.querySelector('[data-modal-like]').addEventListener('click', () => {
-    if (currentPostId === null) return;
-    const post = postsData.find(p => p.id === currentPostId);
-    post.liked = !post.liked;
-    post.likes += post.liked ? 1 : -1;
-    savePost(post);
-    document.getElementById('modalLikeIcon').src = post.liked ? 'https://via.placeholder.com/24/ff0000/fff?text=❤️' : 'https://via.placeholder.com/24?text=🤍';
-    document.getElementById('modalLikes').textContent = `${post.likes.toLocaleString()} likes`;
-    renderPosts(filteredPostsCache || postsData);
-});
-
-document.getElementById('addComment').addEventListener('click', () => {
-    const input = document.getElementById('commentInput');
-    if (!input.value.trim() || currentPostId === null) return;
-    const post = postsData.find(p => p.id === currentPostId);
-    post.comments.push(input.value.trim());
-    savePost(post);
-    document.getElementById('modalComments').innerHTML += `
-        <div class="comment">
-            <img src="https://via.placeholder.com/28/0095f6/fff?text=C" class="comment-avatar">
-            <span>${input.value.trim()}</span>
-        </div>`;
-    document.querySelector(`.post[data-id="${post.id}"] .post-comments`).textContent = `View all ${post.comments.length} comments`;
-    input.value = '';
-});
-
-let filteredPostsCache = null;
-document.getElementById('searchInput').addEventListener('input', e => {
-    const value = e.target.value.toLowerCase();
-    if (!value) {
-        filteredPostsCache = null;
-        renderPosts(postsData);
-        return;
-    }
-    filteredPostsCache = postsData.filter(post => post.user.toLowerCase().includes(value) || post.caption.toLowerCase().includes(value));
-    renderPosts(filteredPostsCache);
-});
-</script>
-</body>
-</html>
+    <script>
+        // Brand name changed to PixLoop
+        document.title = "PixLoop - Photosharing Platform";
+        
+        // Sample data
+        const stories = [
+            { id: 1, name: "Your Story", avatar: "https://randomuser.me/api/portraits/men/32.jpg", isYour: true },
+            { id: 2, name: "Rohit", avatar: "https://randomuser.me/api/portraits/men/22.jpg" },
+            { id: 3, name: "Priya", avatar: "https://randomuser.me/api/portraits/women/44.jpg" },
+            { id: 4, name: "Aman", avatar: "https://randomuser.me/api/portraits/men/65.jpg" },
+        
